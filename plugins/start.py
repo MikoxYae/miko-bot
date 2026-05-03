@@ -1,8 +1,7 @@
-import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from database import add_user, total_users_count
-from config import get_start_pic, START_MSG, OWNER_ID
+from config import get_start_pic, START_MSG, OWNER, OWNER_ID
 
 
 @Client.on_message(filters.command("start") & filters.incoming)
@@ -26,8 +25,8 @@ async def start(client: Client, message: Message):
     buttons = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("👨‍💻 Owner", url=f"https://t.me/{OWNER_ID}"),
-                InlineKeyboardButton("🔔 Updates", url="https://t.me/Anythingbutnew56"),
+                InlineKeyboardButton("👨‍💻 Owner", url=f"https://t.me/{OWNER}"),
+                InlineKeyboardButton("🔔 Updates", url=f"https://t.me/{OWNER}"),
             ],
         ]
     )
