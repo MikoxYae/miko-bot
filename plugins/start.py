@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
 from database import add_user, total_users_count
-from config import get_start_pic, START_MSG, OWNER, OWNER_ID
+from config import START_PICS, START_MSG, OWNER, OWNER_ID
 
 
 @Client.on_message(filters.command("start") & filters.incoming)
@@ -20,8 +20,6 @@ async def start(client: Client, message: Message):
         bot_username=f"@{me.username}",
     )
 
-    pic = get_start_pic()
-
     buttons = InlineKeyboardMarkup(
         [
             [
@@ -31,12 +29,20 @@ async def start(client: Client, message: Message):
         ]
     )
 
-    if pic:
-        await message.reply_photo(
-            photo=pic,
-            caption=text,
-            reply_markup=buttons,
-        )
+    if START_PICS:
+        if len(START_PICS) == 1:
+            await message.reply_photo(
+                photo=START_PICS[0],
+                caption=text,
+                reply_markup=buttons,
+            )
+        else:
+            media_group = [
+                InputMediaPhoto(media=pic, caption=text if i == 0 else "")
+                for i, pic in enumerate(START_PICS)
+            ]
+            await message.reply_media_group(media=media_group)
+            await message.reply_text(text, reply_markup=buttons)
     else:
         await message.reply_text(text, reply_markup=buttons)
 
